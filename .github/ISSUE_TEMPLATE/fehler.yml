@@ -1,0 +1,42 @@
+name: Fehler melden
+description: Etwas funktioniert nicht wie beschrieben
+labels: ["fehler"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke fürs Melden. Je genauer, desto schneller ist es behoben.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Steht im Configurator unter Installation ("Aktiv: ...").
+      placeholder: "1.2.0"
+    validations:
+      required: true
+  - type: textarea
+    id: was-passiert
+    attributes:
+      label: Was passiert?
+      description: Was hast du gemacht, was wurde erwartet, was kam stattdessen?
+    validations:
+      required: true
+  - type: dropdown
+    id: kanal
+    attributes:
+      label: Welcher Weg betrifft es?
+      options:
+        - Bark-Push
+        - E-Mail-Wecker
+        - Beides
+        - Weder noch / Oberfläche
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Auszug aus der plugin.log
+      description: >
+        Im Configurator unter Installation die Logdatei auf "ausführlich" stellen,
+        einmal fliegen, dann plugin.log aus dem Plugins-Ordner hier einfügen.
+      render: text

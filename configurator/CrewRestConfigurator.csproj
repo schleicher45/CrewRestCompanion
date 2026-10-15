@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>7.3</LangVersion>
+    <RootNamespace>CrewRestConfigurator</RootNamespace>
+    <AssemblyName>CrewRestConfigurator</AssemblyName>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <Product>Crew Rest Companion Configurator</Product>
+    <AssemblyTitle>Crew Rest Companion Configurator</AssemblyTitle>
+    <Company>schleicher45</Company>
+    <Copyright>Copyright (c) 2026</Copyright>
+    <Version>1.2.0</Version>
+    <FileVersion>1.2.0.0</FileVersion>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <EnableDefaultItems>true</EnableDefaultItems>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="app.ico">
+      <LogicalName>icon.dark.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app-light.ico">
+      <LogicalName>icon.light.ico</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Security" />
+  </ItemGroup>
+
+</Project>

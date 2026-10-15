@@ -1,0 +1,11 @@
+name: Idee oder Wunsch
+description: Vorschlag für eine Funktion
+labels: ["idee"]
+body:
+  - type: textarea
+    id: idee
+    attributes:
+      label: Was schwebt dir vor?
+      description: Was soll das Plugin können, und in welcher Situation hilft dir das?
+    validations:
+      required: true

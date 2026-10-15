@@ -1,0 +1,19 @@
+# Build-Ergebnisse
+bin/
+obj/
+dist/
+build.log
+installer/Output/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Betriebssystem
+Thumbs.db
+desktop.ini
+
+# Nur fuer mich: Veroeffentlichungs-Notizen, Release-Texte, Hilfsskripte
+_privat/
+inno-setup-installation.log

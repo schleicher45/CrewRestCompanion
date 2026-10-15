@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Quellcode holen
+        uses: actions/checkout@v4
+
+      - name: MSBuild bereitstellen
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Bauen (Release)
+        run: msbuild CrewRestCompanion.sln /restore /t:Rebuild /p:Configuration=Release /v:minimal
+
+      - name: Ergebnisse sammeln
+        run: |
+          mkdir dist
+          copy plugin\bin\Release\CrewRestCompanion.dll dist\
+          copy configurator\bin\Release\net48\CrewRestConfigurator.exe dist\
+
+      - name: Als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: CrewRestCompanion
+          path: dist/

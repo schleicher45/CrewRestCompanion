@@ -1,0 +1,66 @@
+name: Release
+
+# Laeuft, sobald ein Tag wie v1.2.0 geschoben wird:
+#   git tag v1.2.0
+#   git push origin v1.2.0
+# Ergebnis: ein GitHub-Release mit Setup-Datei und ZIP.
+
+on:
+  push:
+    tags: [ "v*" ]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Quellcode holen
+        uses: actions/checkout@v4
+
+      - name: MSBuild bereitstellen
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Bauen (Release)
+        run: msbuild CrewRestCompanion.sln /restore /t:Rebuild /p:Configuration=Release /v:minimal
+
+      - name: Ergebnisse sammeln
+        run: |
+          mkdir dist
+          copy plugin\bin\Release\CrewRestCompanion.dll dist\
+          copy configurator\bin\Release\net48\CrewRestConfigurator.exe dist\
+
+      - name: Versionsnummer aus dem Tag lesen
+        id: version
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}" -replace '^v\.?',''
+          if (-not $version) { $version = "0.0.0" }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Inno Setup installieren
+        run: choco install innosetup --no-progress -y
+
+      - name: Setup bauen
+        shell: pwsh
+        run: |
+          $iscc = Get-ChildItem "C:\Program Files (x86)\Inno Setup *\ISCC.exe",
+                                "C:\Program Files\Inno Setup *\ISCC.exe" -ErrorAction SilentlyContinue |
+                  Select-Object -First 1
+          if (-not $iscc) { throw "ISCC.exe nicht gefunden" }
+          & $iscc.FullName "/DAppVersion=${{ steps.version.outputs.version }}" installer\CrewRestCompanion.iss
+
+      - name: ZIP fuer alle, die kein Setup wollen
+        shell: pwsh
+        run: Compress-Archive -Path dist\* -DestinationPath "CrewRestCompanion-${{ steps.version.outputs.version }}.zip"
+
+      - name: Release veroeffentlichen
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          generate_release_notes: true
+          files: |
+            installer/Output/*.exe
+            CrewRestCompanion-*.zip
